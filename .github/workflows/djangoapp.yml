@@ -40,4 +40,4 @@ jobs:
 
     - name: Build image
       run: |
-        docker build -t $CONTAINER_IMAGE -t $GITHUB_REPOSITORY:$GITHUB_SHA ./app
+        docker build ./app --file Dockerfile --tag image
