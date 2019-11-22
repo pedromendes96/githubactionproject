@@ -77,7 +77,7 @@ jobs:
 
     - name: Check if is ready to deploy
       run: |
-        python manage.py check --deploy --fail-level ERROR
+        python app/manage.py check --deploy --fail-level ERROR
 
     # - name: Build image
     #   run: |
