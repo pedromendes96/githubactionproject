@@ -91,7 +91,7 @@ jobs:
       # Pre deploy checks
       - name: Deploy static files
         run: |
-          python $APP_DIRECTORY/manage.py collectstatic
+          python $APP_DIRECTORY/manage.py collectstatic --noinput
       - name: Compile translation messages
         run: |
           python $APP_DIRECTORY/manage.py compilemessages
