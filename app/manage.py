@@ -5,7 +5,7 @@ import sys
 
 
 def main():
-    # sdd
+    # sd
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
     try:
         from django.core.management import execute_from_command_line
