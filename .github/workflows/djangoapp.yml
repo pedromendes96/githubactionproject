@@ -73,17 +73,17 @@ jobs:
         run: |
           python ${{ APP_DIRECTORY }}/manage.py makemigrations –-merge
       - name: Make snapshot of DB
-      #   run: |
-      #     aws rds create-db-snapshot --db-snapshot-identifier ${{ DATABASE_SNAPSHOT_IDENTIFIER }} --db-instance-identifier ${{ DATABASE_INSTANCE_IDENTIFIER }}
-      # - name: Make the migrations changes in the DB
-      #   continue-on-error: true
-      #   run: |
-      #     python ${{ APP_DIRECTORY }}/manage.py migrate
-      # - name: Revert the changes
-      #   if: failure()
-      #   run: |
-      #     aws rds restore-db-instance-from-db-snapshot --db-instance-identifier ${{ DATABASE_SNAPSHOT_IDENTIFIER }} --db-snapshot-identifier ${{ DATABASE_INSTANCE_IDENTIFIER }}
-      #     exit 1
+        run: |
+          aws rds create-db-snapshot --db-snapshot-identifier ${{ DATABASE_SNAPSHOT_IDENTIFIER }} --db-instance-identifier ${{ DATABASE_INSTANCE_IDENTIFIER }}
+      - name: Make the migrations changes in the DB
+        continue-on-error: true
+        run: |
+          python ${{ APP_DIRECTORY }}/manage.py migrate
+      - name: Revert the changes
+        if: failure()
+        run: |
+          aws rds restore-db-instance-from-db-snapshot --db-instance-identifier ${{ DATABASE_SNAPSHOT_IDENTIFIER }} --db-snapshot-identifier ${{ DATABASE_INSTANCE_IDENTIFIER }}
+          exit 1
       # Testing
       - name: Test django project
         run: |
@@ -103,8 +103,8 @@ jobs:
         run: |
           docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
       - name: Build Image
-      - run: |
+        run: |
           docker build -t docker.pkg.github.com/${{github.repository.full_name}}/$CONTAINER_IMAGE_NAME:$GITHUB_SHA ./app
       - name: Publish Image
-      - run: |
+        run: |
           docker push docker.pkg.github.com/${{github.repository.full_name}}/$CONTAINER_IMAGE_NAME:$GITHUB_SHA
