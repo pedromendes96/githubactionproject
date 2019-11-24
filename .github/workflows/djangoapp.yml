@@ -19,9 +19,6 @@ jobs:
 
     # Context of the environment / job / steps / runner / strategy / matrix
     steps:
-      - name: Exit
-        run: |
-          exit 1
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
@@ -71,11 +68,11 @@ jobs:
           flake8 app/ --count --select=E9,F63,F7,F82 --show-source --statistics
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 app/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      # # Data migration
-      # - name: Making migrations
-      #   run: |
-      #     python ${{ APP_DIRECTORY }}/manage.py makemigrations –-merge
-      # - name: Make snapshot of DB
+      # Data migration
+      - name: Making migrations
+        run: |
+          python ${{ APP_DIRECTORY }}/manage.py makemigrations –-merge
+      - name: Make snapshot of DB
       #   run: |
       #     aws rds create-db-snapshot --db-snapshot-identifier ${{ DATABASE_SNAPSHOT_IDENTIFIER }} --db-instance-identifier ${{ DATABASE_INSTANCE_IDENTIFIER }}
       # - name: Make the migrations changes in the DB
@@ -86,27 +83,28 @@ jobs:
       #   if: failure()
       #   run: |
       #     aws rds restore-db-instance-from-db-snapshot --db-instance-identifier ${{ DATABASE_SNAPSHOT_IDENTIFIER }} --db-snapshot-identifier ${{ DATABASE_INSTANCE_IDENTIFIER }}
-      # # Testing
-      # - name: Test django project
-      #   run: |
-      #     python ${{ APP_DIRECTORY }}/manage.py test
-      # # Pre deploy checks
-      # - name: Deploy static files
-      #   run: |
-      #     python ${{ APP_DIRECTORY }}/manage.py collectstatic
+      #     exit 1
+      # Testing
+      - name: Test django project
+        run: |
+          python ${{ APP_DIRECTORY }}/manage.py test
+      # Pre deploy checks
+      - name: Deploy static files
+        run: |
+          python ${{ APP_DIRECTORY }}/manage.py collectstatic
       # - name: Compile translation messages
       #   run: |
       #     python ${{ APP_DIRECTORY }}/manage.py compilemessages
-      # - name: Check if is ready to deploy
-      #   run: |
-      #     python ${{ APP_DIRECTORY }}/manage.py check --deploy --fail-level ERROR
-      # # Deploy how to deploy via kubernetes... must have a way...
-      # - name: Login docker into github packages
-      #   run: |
-      #     docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-      # - name: Build Image
-      # - run: |
-      #     docker build -t docker.pkg.github.com/${{github.repository.full_name}}/$CONTAINER_IMAGE_NAME:$GITHUB_SHA ./app
-      # - name: Publish Image
-      # - run: |
-      #     docker push docker.pkg.github.com/${{github.repository.full_name}}/$CONTAINER_IMAGE_NAME:$GITHUB_SHA
+      - name: Check if is ready to deploy
+        run: |
+          python ${{ APP_DIRECTORY }}/manage.py check --deploy --fail-level ERROR
+      Deploy how to deploy via kubernetes... must have a way...
+      - name: Login docker into github packages
+        run: |
+          docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Image
+      - run: |
+          docker build -t docker.pkg.github.com/${{github.repository.full_name}}/$CONTAINER_IMAGE_NAME:$GITHUB_SHA ./app
+      - name: Publish Image
+      - run: |
+          docker push docker.pkg.github.com/${{github.repository.full_name}}/$CONTAINER_IMAGE_NAME:$GITHUB_SHA
