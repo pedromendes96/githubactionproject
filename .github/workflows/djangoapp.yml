@@ -71,7 +71,7 @@ jobs:
       # Data migration
       - name: Making migrations
         run: |
-          python $APP_DIRECTORY/manage.py makemigrations –-merge
+          python $APP_DIRECTORY/manage.py makemigrations --merge
       # - name: Make snapshot of DB
       #   run: |
       #     aws rds create-db-snapshot --db-snapshot-identifier $DATABASE_SNAPSHOT_IDENTIFIER --db-instance-identifier DATABASE_INSTANCE_IDENTIFIER
