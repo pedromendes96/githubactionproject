@@ -71,40 +71,40 @@ jobs:
       # Data migration
       - name: Making migrations
         run: |
-          python ${{ APP_DIRECTORY }}/manage.py makemigrations –-merge
-      - name: Make snapshot of DB
-        run: |
-          aws rds create-db-snapshot --db-snapshot-identifier ${{ DATABASE_SNAPSHOT_IDENTIFIER }} --db-instance-identifier ${{ DATABASE_INSTANCE_IDENTIFIER }}
+          python $APP_DIRECTORY/manage.py makemigrations –-merge
+      # - name: Make snapshot of DB
+      #   run: |
+      #     aws rds create-db-snapshot --db-snapshot-identifier $DATABASE_SNAPSHOT_IDENTIFIER --db-instance-identifier DATABASE_INSTANCE_IDENTIFIER
       - name: Make the migrations changes in the DB
         continue-on-error: true
         run: |
-          python ${{ APP_DIRECTORY }}/manage.py migrate
-      - name: Revert the changes
-        if: failure()
-        run: |
-          aws rds restore-db-instance-from-db-snapshot --db-instance-identifier ${{ DATABASE_SNAPSHOT_IDENTIFIER }} --db-snapshot-identifier ${{ DATABASE_INSTANCE_IDENTIFIER }}
-          exit 1
+          python $APP_DIRECTORY/manage.py migrate
+      # - name: Revert the changes
+      #   if: failure()
+      #   run: |
+      #     aws rds restore-db-instance-from-db-snapshot --db-instance-identifier $DATABASE_SNAPSHOT_IDENTIFIER --db-snapshot-identifier DATABASE_INSTANCE_IDENTIFIER
+      #     exit 1
       # Testing
       - name: Test django project
         run: |
-          python ${{ APP_DIRECTORY }}/manage.py test
+          python $APP_DIRECTORY/manage.py test
       # Pre deploy checks
       - name: Deploy static files
         run: |
-          python ${{ APP_DIRECTORY }}/manage.py collectstatic
+          python $APP_DIRECTORY/manage.py collectstatic
       - name: Compile translation messages
         run: |
-          python ${{ APP_DIRECTORY }}/manage.py compilemessages
+          python $APP_DIRECTORY/manage.py compilemessages
       - name: Check if is ready to deploy
         run: |
-          python ${{ APP_DIRECTORY }}/manage.py check --deploy --fail-level ERROR
+          python $APP_DIRECTORY/manage.py check --deploy --fail-level ERROR
       # Deploy how to deploy via kubernetes... must have a way...
       - name: Login docker into github packages
         run: |
           docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
       - name: Build Image
         run: |
-          docker build -t docker.pkg.github.com/${{github.repository.full_name}}/$CONTAINER_IMAGE_NAME:$GITHUB_SHA ./app
+          docker build -t docker.pkg.github.com/${{ github.repository.full_name }}/$CONTAINER_IMAGE_NAME:$GITHUB_SHA ./app
       - name: Publish Image
         run: |
-          docker push docker.pkg.github.com/${{github.repository.full_name}}/$CONTAINER_IMAGE_NAME:$GITHUB_SHA
+          docker push docker.pkg.github.com/${{ github.repository.full_name }}/$CONTAINER_IMAGE_NAME:$GITHUB_SHA
