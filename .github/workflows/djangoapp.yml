@@ -106,7 +106,7 @@ jobs:
           docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
       - name: Build Image
         run: |
-          docker build -t $CONTAINER_IMAGE_NAME .
+          docker build -t docker.pkg.github.com/${{ github.repository.full_name }}/monalisa:1.0 .
       - name: Publish Image
         run: |
-          docker push $CONTAINER_IMAGE_NAME
+          docker push docker.pkg.github.com/${{ github.repository.full_name }}/monalisa:1.0
