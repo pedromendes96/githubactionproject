@@ -90,9 +90,11 @@ jobs:
           python $APP_DIRECTORY/manage.py test
       # Pre deploy checks
       - name: Deploy static files
+        continue-on-error: true
         run: |
           python $APP_DIRECTORY/manage.py collectstatic --noinput
       - name: Compile translation messages
+        continue-on-error: true
         run: |
           python $APP_DIRECTORY/manage.py compilemessages
       - name: Check if is ready to deploy
