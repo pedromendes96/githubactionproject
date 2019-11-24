@@ -91,10 +91,10 @@ jobs:
         run: |
           python ${{ APP_DIRECTORY }}/manage.py migrate
 
-      - name: Revert the changes
-        if: failure()
-        run: |
-          aws rds restore-db-instance-from-db-snapshot --db-instance-identifier ${{ DATABASE_SNAPSHOT_IDENTIFIER }} --db-snapshot-identifier ${{ DATABASE_INSTANCE_IDENTIFIER }}
+      # - name: Revert the changes
+      #   if: failure()
+      #   run: |
+      #     aws rds restore-db-instance-from-db-snapshot --db-instance-identifier ${{ DATABASE_SNAPSHOT_IDENTIFIER }} --db-snapshot-identifier ${{ DATABASE_INSTANCE_IDENTIFIER }}
 
       # Testing
       - name: Test django project
