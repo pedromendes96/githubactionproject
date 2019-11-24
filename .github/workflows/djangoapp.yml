@@ -92,13 +92,13 @@ jobs:
       - name: Deploy static files
         run: |
           python ${{ APP_DIRECTORY }}/manage.py collectstatic
-      # - name: Compile translation messages
-      #   run: |
-      #     python ${{ APP_DIRECTORY }}/manage.py compilemessages
+      - name: Compile translation messages
+        run: |
+          python ${{ APP_DIRECTORY }}/manage.py compilemessages
       - name: Check if is ready to deploy
         run: |
           python ${{ APP_DIRECTORY }}/manage.py check --deploy --fail-level ERROR
-      Deploy how to deploy via kubernetes... must have a way...
+      # Deploy how to deploy via kubernetes... must have a way...
       - name: Login docker into github packages
         run: |
           docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
