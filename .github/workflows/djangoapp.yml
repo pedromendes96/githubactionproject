@@ -19,7 +19,7 @@ jobs:
 
     # Context of the environment / job / steps / runner / strategy / matrix
     steps:
-      - name:
+      - name: Exit
         run: |
           exit 1
       - name: Dump GitHub context
