@@ -6,7 +6,7 @@ on:
       - app/**
 
 env:
-  CONTAINER_IMAGE_NAME: app:1.0
+  CONTAINER_IMAGE_NAME: app-${{ github.sha }}
   DATABASE_INSTANCE_IDENTIFIER: DATABASE_INSTANCE_IDENTIFIER
   DATABASE_SNAPSHOT_IDENTIFIER: snapshot-${{ github.sha }}
   APP_DIRECTORY: app
